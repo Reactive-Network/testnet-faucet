@@ -42,13 +42,13 @@ Assign the `Deployed to` address from the response to `REACTIVE_FAUCET_L1_ADDR`.
 Currently active reactive contract address:
 
 ```bash
-export REACTIVE_FAUCET_ADDR=0xafE114cF8c95A45351f90C9deF22A8B4efC72Ff2
+export REACTIVE_FAUCET_ADDR=0x43CaD7A98C05Bd105A337B2EDEF9d4BeBcdFEFaE
 ```
 
 Deploy the `ReactiveFaucet` contract to the Reactive Network and assign the `Deployed to` address from the response to `REACTIVE_FAUCET_ADDR`.
 
 ```bash
-forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 10000ether --constructor-args $REACTIVE_FAUCET_L1_ADDR 50ether 50000
+forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args $REACTIVE_FAUCET_L1_ADDR 500ether 1000000
 ```
 
 ### Step 3
@@ -56,10 +56,10 @@ forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE
 Test the faucet:
 
 ```bash
-cast send $REACTIVE_FAUCET_L1_ADDR --rpc-url $SEPOLIA_RPC --private-key $SEPOLIA_PRIVATE_KEY --value 0.01ether
+cast send $REACTIVE_FAUCET_L1_ADDR --rpc-url $SEPOLIA_RPC --private-key $SEPOLIA_PRIVATE_KEY --value 0.1ether
 ```
 
-This should result in receiving 0.05 REACT.
+This should result in receiving 10 REACT.
 
 ### Optional Steps
 
@@ -78,5 +78,5 @@ cast send $REACTIVE_FAUCET_ADDR "resume()" --rpc-url $REACTIVE_RPC --private-key
 Provide additional funds to the reactive contract if needed:
 
 ```bash
-cast send $REACTIVE_FAUCET_ADDR --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY --value 1000ether
+cast send $REACTIVE_FAUCET_ADDR --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY --value 10000ether
 ```
