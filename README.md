@@ -2,7 +2,7 @@
 
 ## Overview
 
-Reactive Faucet App bridges Ethereum and Base Sepolia with Reactive Testnet through a two-contract architecture. When a user sends testing ETH to one of the faucet contracts deployed on Ethereum and Base Sepolia, they interact with their paired contract on Reactive. Once the request is verified and processed, the user receives lReact tokens on Reactive Testnet.
+Reactive Faucet App bridges Ethereum/Base Sepolia with Reactive Testnet through a two-contract architecture. When a user sends testing ETH to one of the faucet contracts deployed on Ethereum/Base Sepolia, they interact with their paired Reactive contracts. Once the request is verified and processed, the user receives lReact tokens on Reactive Testnet.
 
 More on [Reactive Faucet →](https://dev.reactive.network/reactive-mainnet#get-testnet-react)
 
@@ -10,12 +10,13 @@ More on [Reactive Faucet →](https://dev.reactive.network/reactive-mainnet#get-
 
 - **Ethereum/Base Sepolia Contract:** [ReactiveFaucetL1](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetL1.sol) handles Ether payment requests, defines a maximum payout per request, and emits `PaymentRequest` events containing details of the transaction.
 
-- **Reactive Contracts:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) and [ReactiveFaucetBase](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetBase.sol) operate on Reactive Network. They subscribe to events on Ethereum and Base Sepolia, process callbacks, and distribute lReact to the appropriate receivers based on external `PaymentRequest` events.
+- **Reactive Contract:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) operates on Reactive Network. Subscribes to events on Ethereum/Base Sepolia, processes callbacks, and distributes lReact to the appropriate receivers based on external `PaymentRequest` events.
 
 ## Deployment & Testing
 
 Make sure the following environment variables are correctly configured before proceeding:
 
+* `CHAIN_ID` — `11155111` for Ethereum Sepolia and `84532` for Base Sepolia
 * `SEPOLIA_RPC` — RPC URL for Ethereum Sepolia, (see [Ethereum Sepolia](https://chainlist.org/chain/11155111))
 * `SEPOLIA_PRIVATE_KEY` — Ethereum Sepolia private key
 * `BASE_RPC` — RPC URL for Base Sepolia, (see [Base Sepolia](https://chainlist.org/chain/84532))
@@ -61,12 +62,10 @@ export REACTIVE_SEPOLIA_ADDR=0x43CaD7A98C05Bd105A337B2EDEF9d4BeBcdFEFaE
 export REACTIVE_BASE_ADDR=0x08e63f0780C85b9FA97C3AA7A07FbA88168cF443
 ```
 
-#### Ethereum Sepolia
-
 Deploy the Reactive contract for Ethereum Sepolia and assign the `Deployed to` address from the response to `REACTIVE_SEPOLIA_ADDR`.
 
 ```bash
-forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args $SEPOLIA_FAUCET_L1_ADDR 500ether 1000000
+forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args 11155111 $SEPOLIA_FAUCET_L1_ADDR 500ether 1000000
 ```
 
 #### Base Sepolia
@@ -74,7 +73,7 @@ forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE
 Deploy the Reactive contract for Base Sepolia and assign the `Deployed to` address from the response to `REACTIVE_BASE_ADDR`.
 
 ```bash
-forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucetBase.sol:ReactiveFaucetBase --value 100000ether --constructor-args $BASE_FAUCET_L1_ADDR 500ether 1000000
+forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args 84532 $BASE_FAUCET_L1_ADDR 500ether 1000000
 ```
 
 ### Step 3
