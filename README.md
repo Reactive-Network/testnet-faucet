@@ -2,15 +2,15 @@
 
 ## Overview
 
-The Reactive Faucet App bridges Ethereum Sepolia and Reactive Testnet through a two-contract architecture. When a user sends Sepolia ETH to the faucet contract deployed on Sepolia, this contract communicates with its paired contract on the Reactive Network. Once the request is verified and processed, the user receives REACT tokens on the Reactive Testnet.
+Reactive Faucet App bridges Ethereum and Base Sepolia with Reactive Testnet through a two-contract architecture. When a user sends testing ETH to one of the faucet contracts deployed on Ethereum and Base Sepolia, they interact with their paired contract on Reactive. Once the request is verified and processed, the user receives lReact tokens on Reactive Testnet.
 
 More on [Reactive Faucet →](https://dev.reactive.network/reactive-mainnet#get-testnet-react)
 
 ## Contracts
 
-- **Sepolia Contract:** [ReactiveFaucetL1](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetL1.sol) handles Ether payment requests, defines a maximum payout per request, and emits `PaymentRequest` events containing details of the transaction.
+- **Ethereum/Base Sepolia Contract:** [ReactiveFaucetL1](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetL1.sol) handles Ether payment requests, defines a maximum payout per request, and emits `PaymentRequest` events containing details of the transaction.
 
-- **Reactive Contract:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) operates on the Reactive Network. It subscribes to events on the Sepolia chain, processes callbacks, and distributes REACT to the appropriate receivers based on external `PaymentRequest` events.
+- **Reactive Contracts:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) and [ReactiveFaucetBase](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetBase.sol) operate on Reactive Network. They subscribe to events on Ethereum and Base Sepolia, process callbacks, and distribute lReact to the appropriate receivers based on external `PaymentRequest` events.
 
 ## Deployment & Testing
 
