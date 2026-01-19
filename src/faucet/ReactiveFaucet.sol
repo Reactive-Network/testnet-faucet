@@ -7,29 +7,40 @@ import '../../lib/reactive-lib/src/abstract-base/AbstractPausableReactive.sol';
 
 contract ReactiveFaucet is AbstractPausableReactive, AbstractCallback {
 
-    uint256 private constant SEPOLIA_CHAIN_ID = 11155111;
     uint256 private constant PAYMENT_REQUEST_TOPIC_0 = 0x8e191feb68ec1876759612d037a111be48d8ec3db7f72e4e7d321c2c8008bd0d;
     uint256 private constant EXCHANGE_RATE_FACTOR = 10000;
     uint64 private constant CALLBACK_GAS_LIMIT = 1000000;
 
     // State specific to ReactVM contract instance
+    uint256 public chainId;
     address private l1;
     uint256 public max_payout;
     uint256 public exchangeRate;
 
-    constructor(address _l1, uint256 _max_payout, uint256 _exchangeRate) AbstractCallback(address(SERVICE_ADDR)) payable {
+    constructor(
+        uint256 _chainId,
+        address _l1,
+        uint256 _max_payout,
+        uint256 _exchangeRate
+    )
+        AbstractCallback(address(SERVICE_ADDR))
+        payable
+    {
+        chainId = _chainId;
         l1 = _l1;
         max_payout = _max_payout;
         exchangeRate = _exchangeRate;
+
         bytes memory payload = abi.encodeWithSignature(
             "subscribe(uint256,address,uint256,uint256,uint256,uint256)",
-            SEPOLIA_CHAIN_ID,
+            chainId,
             l1,
             PAYMENT_REQUEST_TOPIC_0,
             REACTIVE_IGNORE,
             REACTIVE_IGNORE,
             REACTIVE_IGNORE
         );
+
         (bool subscription_result,) = address(service).call(payload);
         if (!subscription_result) {
             vm = true;
@@ -42,10 +53,15 @@ contract ReactiveFaucet is AbstractPausableReactive, AbstractCallback {
         _;
     }
 
-    function getPausableSubscriptions() override internal view returns (Subscription[] memory) {
+    function getPausableSubscriptions()
+        internal
+        view
+        override
+        returns (Subscription[] memory)
+    {
         Subscription[] memory result = new Subscription[](1);
         result[0] = Subscription(
-            SEPOLIA_CHAIN_ID,
+            chainId,
             l1,
             PAYMENT_REQUEST_TOPIC_0,
             REACTIVE_IGNORE,
@@ -55,7 +71,14 @@ contract ReactiveFaucet is AbstractPausableReactive, AbstractCallback {
         return result;
     }
 
-    function dispense(address sender, address payable receiver, uint256 amount) external onlyReactive(sender) {
+    function dispense(
+        address sender,
+        address payable receiver,
+        uint256 amount
+    )
+        external
+        onlyReactive(sender)
+    {
         uint256 adjustedAmount = (amount * exchangeRate) / EXCHANGE_RATE_FACTOR;
 
         require(adjustedAmount <= max_payout, 'Max payout exceeded');
@@ -81,6 +104,11 @@ contract ReactiveFaucet is AbstractPausableReactive, AbstractCallback {
             address(uint160(log.topic_1)),
             log.topic_2
         );
-        emit Callback(block.chainid, address(this), CALLBACK_GAS_LIMIT, payload);
+        emit Callback(
+            block.chainid,
+            address(this),
+            CALLBACK_GAS_LIMIT,
+            payload
+        );
     }
 }
