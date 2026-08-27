@@ -1,0 +1,17 @@
+# Sample Concourse vars for testnet-faucet pipeline validation.
+# Production webhook tokens live in infra/concourse/vars/local.yml (gitignored).
+
+github-access-token:
+  username: git
+  password: CHANGE_ME
+
+ghcr-credentials:
+  username: CHANGE_ME
+  password: CHANGE_ME
+
+webhook-token-testnet-faucet: CHANGE_ME
+
+kubeconfig-prq: CHANGE_ME
+
+slack-notify:
+  secret: CHANGE_ME

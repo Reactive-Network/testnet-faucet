@@ -1,0 +1,11 @@
+---
+platform: linux
+
+inputs:
+  - name: repo
+
+run:
+  path: bash
+  args:
+    - concourse/scripts/unit-test.sh
+  dir: repo
