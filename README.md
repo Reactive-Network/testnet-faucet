@@ -2,7 +2,7 @@
 
 ## Overview
 
-Reactive Faucet App bridges Ethereum/Base Sepolia with Reactive Testnet through a two-contract architecture. When a user sends testing ETH to one of the faucet contracts deployed on Ethereum/Base Sepolia, they interact with their paired Reactive contracts. Once the request is verified and processed, the user receives lReact tokens on Reactive Testnet.
+Reactive Faucet App bridges Ethereum/Base Sepolia with Reactive Lasna testnet through a two-contract architecture. When a user sends testing ETH to one of the faucet contracts deployed on Ethereum/Base Sepolia, they interact with their paired reactive contracts. Once the request is verified and processed, the user receives lReact tokens on Reactive Lasna.
 
 More on [Reactive Faucet →](https://dev.reactive.network/reactive-mainnet#get-testnet-react)
 
@@ -10,7 +10,7 @@ More on [Reactive Faucet →](https://dev.reactive.network/reactive-mainnet#get-
 
 - **Ethereum/Base Sepolia Contract:** [ReactiveFaucetL1](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucetL1.sol) handles Ether payment requests, defines a maximum payout per request, and emits `PaymentRequest` events containing details of the transaction.
 
-- **Reactive Contract:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) operates on Reactive Network. Subscribes to events on Ethereum/Base Sepolia, processes callbacks, and distributes lReact to the appropriate receivers based on external `PaymentRequest` events.
+- **Reactive Contract:** [ReactiveFaucet](https://github.com/Reactive-Network/testnet-faucet/blob/main/src/faucet/ReactiveFaucet.sol) operates on Reactive Network. Subscribes to events on Ethereum/Base Sepolia and distributes lReact to the appropriate receivers.
 
 ## Deployment & Testing
 
@@ -26,7 +26,7 @@ Make sure the following environment variables are correctly configured before pr
 
 ### Step 1
 
-Skip the first step and export the pre-deployed `SEPOLIA_FAUCET_L1_ADDR` for Ethereum Sepolia or `BASE_FAUCET_L1_ADDR` Base Sepolia:
+Skip the first step and export the pre-deployed `SEPOLIA_FAUCET_L1_ADDR` for Ethereum Sepolia or `BASE_FAUCET_L1_ADDR` for Base Sepolia:
 
 ```bash
 export SEPOLIA_FAUCET_L1_ADDR=0x9b9BB25f1A81078C544C829c5EB7822d747Cf434
@@ -55,14 +55,14 @@ Assign the `Deployed to` address from the response to `BASE_FAUCET_L1_ADDR`.
 
 ### Step 2
 
-Active Reactive contract addresses:
+Active reactive contracts:
 
 ```bash
-export REACTIVE_SEPOLIA_ADDR=0x43CaD7A98C05Bd105A337B2EDEF9d4BeBcdFEFaE
-export REACTIVE_BASE_ADDR=0x08e63f0780C85b9FA97C3AA7A07FbA88168cF443
+export REACTIVE_SEPOLIA_ADDR=0x5cBC52A390E69D9193996AeBFB53F7b97DB6cf51
+export REACTIVE_BASE_ADDR=0xA006550A38e355060e84B2a66aca2B90732f9e4D
 ```
 
-Deploy the Reactive contract for Ethereum Sepolia and assign the `Deployed to` address from the response to `REACTIVE_SEPOLIA_ADDR`.
+Deploy the reactive contract for Ethereum Sepolia and assign the `Deployed to` address from the response to `REACTIVE_SEPOLIA_ADDR`.
 
 ```bash
 forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args 11155111 $SEPOLIA_FAUCET_L1_ADDR 500ether 1000000
@@ -70,7 +70,7 @@ forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE
 
 #### Base Sepolia
 
-Deploy the Reactive contract for Base Sepolia and assign the `Deployed to` address from the response to `REACTIVE_BASE_ADDR`.
+Deploy the reactive contract for Base Sepolia and assign the `Deployed to` address from the response to `REACTIVE_BASE_ADDR`.
 
 ```bash
 forge create --broadcast --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY src/faucet/ReactiveFaucet.sol:ReactiveFaucet --value 100000ether --constructor-args 84532 $BASE_FAUCET_L1_ADDR 500ether 1000000
@@ -102,19 +102,19 @@ This should result in receiving 10 lReact.
 
 #### Ethereum Sepolia
 
-To pause the Reactive contract:
+To pause the reactive contract:
 
 ```bash
 cast send $REACTIVE_SEPOLIA_ADDR "pause()" --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY
 ```
 
-To resume the Reactive contract:
+To resume the reactive contract:
 
 ```bash
 cast send $REACTIVE_SEPOLIA_ADDR "resume()" --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY
 ```
 
-Provide additional funds to the Reactive contract if needed:
+Provide additional funds to the reactive contract if needed:
 
 ```bash
 cast send $REACTIVE_SEPOLIA_ADDR --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY --value 10000ether
@@ -122,19 +122,19 @@ cast send $REACTIVE_SEPOLIA_ADDR --rpc-url $REACTIVE_RPC --private-key $REACTIVE
 
 #### Base Sepolia
 
-To pause the Reactive contract:
+To pause the reactive contract:
 
 ```bash
 cast send $REACTIVE_BASE_ADDR "pause()" --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY
 ```
 
-To resume the Reactive contract:
+To resume the reactive contract:
 
 ```bash
 cast send $REACTIVE_BASE_ADDR "resume()" --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY
 ```
 
-Provide additional funds to the Reactive contract if needed:
+Provide additional funds to the reactive contract if needed:
 
 ```bash
 cast send $REACTIVE_BASE_ADDR --rpc-url $REACTIVE_RPC --private-key $REACTIVE_PRIVATE_KEY --value 10000ether
